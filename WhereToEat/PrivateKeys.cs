@@ -39,7 +39,7 @@ namespace WhereToEat
                 YELP_PRIVATE_KEY = deserialized.yelp_private;
                 YELP_PRIVATE_TOKEN = deserialized.yelp_token_private;
             }
-            catch (Exception ex)
+            catch
             {
                 throw new UnauthorizedAccessException("Cannot access private keys");
             }

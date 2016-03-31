@@ -27,6 +27,12 @@ namespace WhereToEat
             {
                 try
                 {
+                    var conversationMessage = HandleChatMessage(message);
+                    if (conversationMessage != null)
+                    {
+                        return conversationMessage;
+                    }
+
                     var luisJson = Luis.GetBestIntent(message.Text);
                     if (luisJson.intent == "None")
                     {
@@ -72,7 +78,7 @@ namespace WhereToEat
                         message.CreateReplyMessage(
                             $"I found a few places you might like. The top rated place place is {topRated.name} off of {GetLocationString(topRated.location)}. It has {topRated.rating} stars.\nYou can find out more at: {topRated.url}.");
                 }
-                catch (Exception ex)
+                catch
                 {
                     // Something failed. Let's see if it's in one of our pre-defined messages
                     var chatMessage = HandleChatMessage(message);
