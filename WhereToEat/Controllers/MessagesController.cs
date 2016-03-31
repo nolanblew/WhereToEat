@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -76,7 +77,7 @@ namespace WhereToEat
                     var topRated = yelpResult.businesses[_rnd.Next(0, yelpResult.businesses.Length)];
                     return
                         message.CreateReplyMessage(
-                            $"I found a few places you might like. The top rated place place is {topRated.name} off of {GetLocationString(topRated.location)}. It has {topRated.rating} stars.\nYou can find out more at: {topRated.url}.");
+                            $"I found a few places you might like. The top rated place place is {topRated.name} {GetLocationString(topRated.location)}. It has {topRated.rating} stars.\nYou can find out more at: {topRated.url}.");
                 }
                 catch
                 {
@@ -119,7 +120,25 @@ namespace WhereToEat
             return null;
         }
 
-        string GetLocationString(Apis.Location location) { return location.cross_streets; }
+        string GetLocationString(Apis.Location location)
+        {
+            if (!string.IsNullOrEmpty(location.cross_streets))
+            {
+                return $"off of {location.cross_streets}";
+            }
+            StringBuilder sb = new StringBuilder();
+            if (location.display_address.Any())
+            {
+                sb.Append(location.display_address.First() + ", ");
+            }
+            for (int i = 1; i < location.display_address.Length; i++)
+            {
+                var address = location.display_address[i];
+                sb.Append(address + " ");
+            }
+
+            return $"at {sb.ToString()}";
+        }
 
         private Message HandleSystemMessage(Message message)
         {
