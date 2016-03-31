@@ -99,7 +99,7 @@ namespace WhereToEat
         {
             var txt = message.Text.ToLower().Trim();
 
-            if (txt.Contains("hi") || txt.Contains("hey") || txt.Contains("hello"))
+            if (txt.Length < 10 && (txt.Contains("hi") || txt.Contains("hey") || txt.Contains("hello")))
             {
                 return message.CreateReplyMessage("Hey there! What can I find for you?");
             }
